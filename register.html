@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>login</title>
+    <script src="./lib/vue.js"></script>
+    <script src="./lib/axios.js"></script>
+    <link rel="stylesheet" href="./css/login.css">
+</head>
+
+<body>
+    <div id="app">
+        <div class="form-register">
+            <div>
+                <input type="text" placeholder="昵称" class="deep-input" v-model="name">
+            </div>
+            <div>
+                <input type="password" placeholder="密码（6-16个字符组成，区分大小写）" class="deep-input" v-model="password">
+            </div>
+            <div class="phonenum-box">
+                <input type="text" placeholder="请填写常用手机号" class="deep-input">
+            </div>
+            <div class="code-box">
+                <input type="text" placeholder="请输入短信验证码" class="deep-input">
+                <input type="button" value="点击获取" class="gain-code">
+            </div>
+            <div>
+                <input type="button" value="注册" class="register-btn" @click="post">
+            </div>
+            <div class="back-login">
+                <a href="#/login" class="back-login-a">已有账号，直接登录></a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                name: '',
+                password: ''
+            },
+            methods: {
+                post: function () {
+                    let data = new FormData();
+                    data.append('name',this.name),
+                    data.append('password',this.password);
+                    
+                    axios({
+                        method: 'post',
+                        url: 'http://368xt2.cn:8080/Kun/user/register',
+                        data
+                    }).then(function(res){
+                        if(res.data.code === 2000) {
+                            alert('注册成功！');
+                            window.location.href = './login.html';
+                        }else if (res.data.code === 2001) {
+                            alert('注册失败！');
+                            return;
+                        }
+                    }).catch(function(err){
+
+                    })
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

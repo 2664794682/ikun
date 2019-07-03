@@ -1,0 +1,273 @@
+#main {
+    width: 1350px;
+    min-height: 2000px;
+    margin: 70px auto 0 auto;
+    padding-top: 100px;
+    background-color: rgba(256, 256, 256, 0.4);
+    opacity: 0;
+    transition: opacity 4s;
+    -webkit-transition: opacity 4s;
+    -moz-transition: opacity 4s;
+    -ms-transition: opacity 4s;
+    -o-transition: opacity 4s;
+}
+
+/* Ikun·推广 */
+.extensionItem {
+    width: 100%;
+    height: 400px;
+}
+
+.itemTitle {
+    width: 200px;
+    height: 50px;
+    padding-left: 10px;
+    box-sizing: border-box;
+    line-height: 50px;
+    color: white;
+    background-color: rgb(165, 122, 76);
+}
+
+.extensionItem .extensionMain {
+    display: flex;
+    justify-content: center;
+
+    margin-top: 50px;
+}
+
+/* 轮播图 */
+.extensionItem .carousel {
+    width: 440px;
+    height: 220px;
+    margin-right: 20px;
+}
+
+.carousel .swiper-container {
+    width: 100%;
+    height: 100%;
+    /* overflow: hidden; */
+}
+
+.carousel .swiper-slide img {
+    width: 100%;
+    height: 100%;
+}
+
+/* 轮播图右边的视频板块 */
+.extensionItem .extensionRes {
+    width: 720px;
+    height: 220px;
+
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.extensionItem .extensionRes .box {
+    position: relative;
+    width: 160px;
+    height: 100px;
+    background-color: skyblue;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+}
+
+.extensionItem .extensionRes .box-up {
+    align-self: flex-start;
+}
+
+.extensionItem .extensionRes .box-down {
+    align-self: flex-end;
+}
+
+.extensionItem .extensionRes .box img {
+    width: 100%;
+    border-radius: 5px;
+}
+
+.extensionItem .extensionRes .box img:hover {
+    opacity: 0.7;
+}
+
+.extensionItem .box .card-mark {
+    position: absolute;
+    top: 68px;
+    left: 0;
+    box-sizing: border-box;
+    width: 100%;
+    height: 30px;
+    padding: 10px 5px 0 5px;
+    font-size: 12px;
+    line-height: 20px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.extensionItem .box .title {
+    color: #fff;
+    height: 40px;
+    overflow: hidden;
+    margin-bottom: 5px;
+    word-break: break-all;
+    word-wrap: break-word;
+}
+
+
+
+
+/* Ikun · 热门讨论 */
+.discussItem {
+    width: 100%;
+    min-height: 1000px;
+    padding-bottom: 50px;
+}
+
+.discussItem .discussItemMain {
+    width: 800px;
+    min-height: 800px;
+    margin: 50px auto 0 auto;
+    background-color: rgba(245, 245, 249, 1);
+}
+
+.zhihuDiscuss {
+    width: 100%;
+    height: 200px;
+
+    box-sizing: border-box;
+    padding: 15px;
+
+    border-bottom: 1px solid black;
+}
+
+.zhihuDiscuss>a {
+    text-decoration: none;
+    color: black;
+}
+
+.zhihuDiscuss h2:hover {
+    color: rgb(23, 81, 153);
+}
+
+.zhihuDiscuss .discussContent {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.zhihuDiscuss .discussContent-img {
+    width: 190px;
+    height: 105px;
+    margin: 0 20px 10px 0;
+}
+
+.zhihuDiscuss .discussContent-img img {
+    height: 100%;
+    width: 100%;
+}
+
+.zhihuDiscuss .discussContent-text {
+    height: 105px;
+    width: 700px;
+    /* line-height: 28px; */
+    font-size: 15px;
+
+    overflow: hidden;
+}
+
+.zhihuDiscuss .discussContent-text p {
+    display: block;
+    display: -webkit-box;
+    max-width: 100%;
+    height: 105px;
+    line-height: 1.4;
+    margin: 0 auto;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.zhihuDiscuss .discussContent-text input {
+    border: 0;
+    height: auto;
+    background-color: transparent;
+    outline: none;
+    color: #175199;
+    margin-left: 4px;
+    cursor: pointer;
+}
+
+/* Ikun · 话题讨论 */
+.resourceItem .talk-lists {
+    width: 100%;
+    height: 500px;
+    margin-top: 50px;
+    box-sizing: border-box;
+    padding: 0 10px;
+    border: 1px solid pink;
+}
+
+.resourceItem .talk-item {
+    width: 100%;
+    height: 40px;
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 1px solid pink;
+}
+
+.resourceItem .talk-item a {
+    text-decoration: none;
+    color: #333;
+    cursor: pointer;
+}
+
+.resourceItem .talk-item a:hover {
+    text-decoration: underline;
+}
+
+.resourceItem .talk-item > div {
+    height: 100%;
+}
+
+.talk-item .icn {
+    width: 40px;
+}
+
+.talk-item .title {
+    width: 1000px;
+    line-height: 40px;
+    font-size: 14px;
+}
+
+.talk-item .by {
+    width: 120px;
+    font-size: 11px;
+    box-sizing: border-box;
+    padding-top: 5px;
+    line-height: 14px;
+}
+.talk-item .by p{
+    color: #7a7a7a;
+}
+
+.talk-item .num {
+    width:60px;
+    line-height: 40px;
+    font-size: 14px;
+    color: #333;
+}
+
+
+.talk-head #head-p{
+    font-size: 12px;
+    line-height: 40px;
+    color: #111;
+}
+.talk-head  .by {
+    margin: 0;
+    padding: 0;
+}

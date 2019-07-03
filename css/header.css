@@ -1,0 +1,162 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    /* background-image: url('../img/ikunbg.png'); */
+    background-image: url('http://qiniu.zzzia.net/ikunbg.webp');
+    background-size: 100% auto;
+    background-repeat: no-repeat;
+    background-color: #E3E3E8;
+}
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 50px;
+    width: 100%;
+    background-color: rgba(256, 256, 256, 0.5);
+    line-height: 50px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 999;
+}
+
+#topGoMain {
+    margin-left: 50px;
+}
+
+.logo {
+    width: 120px;
+    height: 50px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+}
+
+.logo:hover {
+    background-color: rgba(256, 256, 256, 0.4);
+}
+
+.logo>img {
+    height: 70%;
+}
+
+header li {
+    list-style: none;
+    display: inline-block;
+}
+
+.topClassify {
+    margin-right: 20%;
+    width: 390px;
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.topClassify ul {
+    height: 50px;
+    width: 390px;
+}
+
+.topClassify .classifyItem {
+    width: 100px;
+    height: 100%;
+    text-align: center;
+    cursor: pointer;
+}
+
+.topClassify .classifyItem:hover {
+    background-color: rgba(256, 256, 256, 0.4);
+}
+
+.topClassify .topClassifySearch {
+    position: relative;
+    height: 100%;
+    text-align: center;
+}
+
+#topSearch {
+    padding: 0 40px 0 20px;
+    width: 100px;
+    height: 38px;
+    font-size: 14px;
+    border: 1px solid #eee;
+    border-radius: 40px;
+    background: rgba(256, 256, 256, 0.5);
+
+    outline: none;
+}
+
+#topSearchImg {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin: 5px 0;
+    cursor: pointer;
+}
+
+.topClassify .topClassifySearch {
+    margin-left: 10px;
+}
+
+.topClassify .topClassifySearch img {
+    height: 18px;
+}
+
+.topUser {
+    height: 50px;
+    min-width: 180px;
+    text-align: center;
+    margin-right: 50px;
+    margin-left: 100px;
+}
+
+.topUser > div {
+    display: inline-block;
+}
+
+.topUser .topUserHead {
+    height: 100%;
+}
+
+.topUser img {
+    width: 32px;
+    vertical-align:middle;
+    cursor: pointer;
+}
+
+.topUser .topMsg {
+    width: 50px;
+    height: 50px;
+    margin-left: 20px;
+    margin-right: 15px;
+
+    cursor: pointer;
+}
+
+.topUser .topMsg:hover {
+    background-color: rgba(256, 256, 256, 0.4);
+}
+
+.topUser .topContribute {
+    height: 60px;
+    width: 50px;
+    border-radius: 0 0 5px 5px;
+    -webkit-border-radius: 0 0 5px 5px;
+    -moz-border-radius: 0 0 5px 5px;
+    -ms-border-radius: 0 0 5px 5px;
+    -o-border-radius: 0 0 5px 5px;
+    background-color: rgb(244, 83, 130);
+    cursor: pointer;
+    color: white;
+}

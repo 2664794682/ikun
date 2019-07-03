@@ -1,0 +1,115 @@
+#app {
+    width: 800px;
+    min-height: 200px;
+    margin: 100px auto;
+}
+
+.user {
+    position: relative;
+    height: 80px;
+    margin-left: 100px;
+    line-height: 40px;
+    margin-bottom: 20px;
+}
+
+.user-head {
+    position: absolute;
+    top: 0;
+    left: -100px;
+    width: 80px;
+    height: 80px;
+}
+
+.user-head img {
+    width: 100%;
+    height: 100%;
+}
+
+.user-name {
+    height: 40px;
+    font-size: 21px;
+    font-weight: 700;
+}
+
+.info {
+    height: 40px;
+    cursor: pointer;
+}
+
+.my-articles {
+    width: 800px;
+}
+
+.my-article {
+    display: flex;
+    justify-content: space-around;
+    width: 100px;
+    height: 45px;
+    align-items: center;
+    font-size: 17px;
+    font-weight: 700;
+    color: #646464;
+    border-bottom: 2px solid #646464;
+}
+
+.my-article img {
+    height: 30px;
+}
+
+/* 我的文章 */
+.talk-item {
+    width: 800;
+    height: 40px;
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 1px solid  #646464;
+    padding: 5px 0;
+}
+
+.talk-item a {
+    text-decoration: none;
+    color: #333;
+    cursor: pointer;
+}
+
+.talk-item a:hover {
+    text-decoration: underline;
+}
+
+.talk-item > div {
+    height: 100%;
+}
+
+.talk-item .icn {
+    width: 40px;
+}
+
+.talk-item .title {
+    width: 450px;
+    line-height: 40px;
+    font-size: 14px;
+}
+
+@media screen and (max-width: 800px) {
+    .talk-item .title {
+        width: 150px;
+    }
+}
+
+.talk-item .by {
+    width: 120px;
+    font-size: 11px;
+    box-sizing: border-box;
+    padding-top: 5px;
+    line-height: 11px;
+}
+.talk-item .by p{
+    color: #7a7a7a;
+}
+
+.talk-item .num {
+    width:60px;
+    line-height: 40px;
+    font-size: 14px;
+    color: #333;
+}

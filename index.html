@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>主页</title>
+    <script src="./lib/vue.js"></script>
+    <script src="./lib/axios.js"></script>
+    <script src="./lib/swiper.min.js"></script>
+    <link rel="stylesheet" href="./css/header.css">
+    <link rel="stylesheet" href="./css/index.css">
+    <link rel="stylesheet" href="./lib/swiper.css">
+</head>
+
+<body>
+    <meta name="referrer" content="never">
+
+    <div id="app">
+        <header>
+            <div id="topGoMain">
+                <a href="./index.html" style="text-decoration:none; color:black; ">
+                    <div class="logo">
+                        <img src="./img/logo.png">
+                        <span>IKUN论坛</span>
+                    </div>
+                </a>
+            </div>
+            <div class="topClassify">
+                <ul>
+                    <li class="classifyItem">
+                        <span>最新资讯</span>
+                    </li>
+                    <li class="classifyItem">
+                        <span>互动娱乐</span>
+                    </li>
+                    <li class="topClassifySearch">
+                        <input type="text" id="topSearch" placeholder="搜索">
+                        <div id="topSearchImg">
+                            <img src="./img/topSearch.png" alt="">
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="topUser">
+                <div class="topUserHead" @click="islogin">
+                    <img src="./img/userHead.png" alt="">
+                </div>
+                <div class="topMsg">
+                    <span>消息</span>
+                </div>
+                <div class="topContribute" @click="contribute">
+                    <span>投稿</span>
+                </div>
+
+            </div>
+        </header>
+        <div id="main" :style="{opacity:isVisible}">
+            <!-- Ikun · 推广 -->
+            <div class="extensionItem">
+                <div class="itemTitle">
+                    <span>Ikun · 推广</span>
+                </div>
+                <div class="extensionMain">
+                    <div class="carousel">
+                        <div class="swiper-container">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide">
+                                    <a href="javascript:">
+                                        <img src="./img/1.jpg" alt="">
+                                    </a>
+                                </div>
+                                <div class="swiper-slide">
+                                    <a href="javascript:">
+                                        <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1560414728070&di=bec38af27a521e07a7e7260a844cb7b2&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201803%2F23%2F20180323002501_HzRF2.gif" alt="">
+                                    </a>
+                                </div>
+                                <div class="swiper-slide">
+                                    <a href="javascript:">
+                                        <!-- <img src="./img/3.gif" alt=""> -->
+                                        <img src="https://imgsa.baidu.com/forum/w%3D580/sign=993970ad9e529822053339cbe7ca7b3b/f459a5a95edf8db11409300e0723dd54564e7474.jpg" alt="">
+                                    </a>
+                                </div>
+                            </div>
+                            <!-- 如果需要分页器 -->
+                            <div class="swiper-pagination"></div>
+
+                            <!-- 如果需要导航按钮 -->
+                            <div class="swiper-button-prev"></div>
+                            <div class="swiper-button-next"></div>
+
+                            <!-- 如果需要滚动条 -->
+                            <!-- <div class="swiper-scrollbar"></div> -->
+                        </div>
+                    </div>
+                    <div class="extensionRes">
+                        <div class="box box-up" v-for="item in bilicxks" v-if="item.index < 4">
+                            <a :href="item.videoUrl" target="_blank">
+                                <img :src="item.imgUrl" alt="">
+                            </a>
+                            <div class="card-mark">
+                                <p class="title">{{item.title}}</p>
+                                <p class="autor">{{item.upName}}</p>
+                                <p class="play">{{item.playCount}}</p>
+                            </div>
+                        </div>
+                        <div class="box box-down" v-for="item in bilicxks" v-if="item.index > 3">
+                            <a :href="item.videoUrl" target="_blank">
+                                <img :src="item.imgUrl" alt="">
+                            </a>
+                            <div class="card-mark">
+                                <p class="title">{{item.title}}</p>
+                                <p class="autor">{{item.upName}}</p>
+                                <p class="play">{{item.playCount}}</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!-- Ikun · 热门讨论 -->
+            <div class="discussItem">
+                <div class="itemTitle">
+                    <span>Ikun · 热门讨论</span>
+                </div>
+                <dir class="discussItemMain">
+                    <zhihutmpl v-for="item in zhihu" :zhihu="item"></zhihutmpl>
+                </dir>
+            </div>
+            <!-- Ikun · 话题讨论 -->
+            <div class="resourceItem">
+                <div class="itemTitle">
+                    <span>Ikun · 话题讨论</span>
+                </div>
+                <div class="talk-lists">
+                    <div class="talk-item talk-head">
+                        <div class="icn"></div>
+                        <div class="title">
+                            <p id="head-p">标题</p>
+                        </div>
+                        <div class="by">
+                            <p id="head-p">作者</p>
+                        </div>
+                        <div class="num">
+                            <p id="head-p">评论数</p>
+                        </div>
+                        <div class="by">
+                            <p id="head-p">最后发表</p>
+                        </div>
+                    </div>
+                    <talktmpl v-if="article" v-for="item in article" :key="item.id" :article="item"></talktmpl>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 热门讨论组件模板 -->
+    <template id="zhihutmpl">
+        <div class="zhihuDiscuss">
+            <a :href="'https://www.zhihu.com/question/'+ zhihu.object.question.id" target="_blank">
+                <h2 v-html="zhihu.highlight.title"></h2>
+            </a>
+            <div class="discussContent">
+                <div class="discussContent-img">
+                    <img v-if="zhihu.object.thumbnail_info==null || zhihu.object.thumbnail_info.count==0" src="./img/zhihuImg.jpg" alt="">
+                    <img v-else :src="zhihu.object.thumbnail_info.thumbnails[0].url" alt="">
+                </div>
+                <div class="discussContent-text">
+                    <p v-html="zhihu.highlight.description"></p>
+                </div>
+            </div>
+        </div>
+    </template>
+    <!-- ikun话题组件模板 -->
+    <template id="talktmpl">
+        <div class="talk-item">
+            <div class="icn"></div>
+            <div class="title">
+                <a href="./content.html" @click="toContent">{{article.title}}</a>
+            </div>
+            <div class="by">
+                <a href="">{{article.user.name}}</a>
+                <p>{{article.createDate.split(' ')[0]}}</p>
+            </div>
+            <div class="num">{{article.commentNum || 0}}</div>
+            <div class="by">
+                <a href="">{{article.lastcomm ? article.lastcomm.name : '无'}}</a>
+                <p>{{article.lastcomm ? article.lastcomm.createDate : ''}}</p>
+            </div>
+        </div>
+    </template>
+
+    <script>
+        // 获取cookie
+        var getCookie = function (c_name) {
+            if (document.cookie.length > 0) {
+                c_start = document.cookie.indexOf(c_name + "=");
+                if (c_start != -1) {
+                    c_start = c_start + c_name.length + 1;
+                    c_end = document.cookie.indexOf(";", c_start);
+                    if (c_end == -1) {
+                        c_end = document.cookie.length;
+                    }
+                    return unescape(document.cookie.substring(c_start, c_end));
+                }
+            }
+            return "";
+        }
+
+        var app = new Vue({
+            el: '#app',
+            data: {
+                bilicxks: '',
+                isVisible: 0,
+                article: null,
+                zhihu: '',
+            },
+            methods: {
+                contribute: function () {
+                    window.location.href = './article-edit.html';
+                },
+                islogin: function () {
+                    let data = new FormData();
+                    data.append('token',getCookie('token'));
+                    data.append('tid',getCookie('tid'));
+                    axios({
+                        method: 'post',
+                        url: 'http://119.28.43.120:8080/Kun/user/check',
+                        data
+                    }).then(function (res) {
+                        console.log(res);
+                        if(res.data.msg == '已登录') {
+                            window.location.href = './personal-center.html';
+                        }else {
+                            window.location.href = './login.html';
+                        }
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
+                }
+            },
+            created() {
+                var that = this;
+
+                window.onload = function () {
+                    that.isVisible = 1;
+                    that.userName = sessionStorage.getItem('name') || '';
+                }
+                // 请求b站数据
+                axios.get('http://zzzia.net:8080/bilibili/cxk', {
+                    params: {}
+                }).then(function (res) {
+                    that.bilicxks = res.data.data.slice(0, 8);
+                }).catch(function (error) {
+                    alert(error);
+                });
+
+                //请求知乎数据
+                axios.get('http://119.28.43.120:8080/Kun/article/request', {
+                    params: {}
+                }).then(function (res) {
+                    console.log(res.data.data)
+                    app.zhihu = res.data.data.slice(0,6);
+                }).catch(function (error) {
+                    console.log(error);
+                });
+
+
+                //请求帖子数据
+                axios({
+                    method: 'post',
+                    url: 'http://119.28.43.120:8080/Kun/article/search'
+                }).then(function (res) {
+                    if (res.data.length <= 20) {
+                        app.article = res.data;
+                    } else {
+                        app.article = res.data.slice(0, res.data.length);
+                    }
+                    console.log(app.article)
+                }).catch(function (error) {
+                    console.log(error);
+                });
+            },
+            components: {
+                zhihutmpl: {
+                    props:['zhihu'],
+                    template: '#zhihutmpl',
+                    data() {
+                        return {
+                            title: '',
+                            imgurl: '',
+                            content: ''
+                        }
+                    }
+                },
+                talktmpl: {
+                    props: ['article'],
+                    template: '#talktmpl',
+                    data() {
+                        return {
+
+                        }
+                    },
+                    methods: {
+                        toContent: function () {
+                            //把点击的帖子数据存入sessionStorage
+                            sessionStorage.setItem('content', `# ${this.article.title}\n${this.article.content}`);
+                            sessionStorage.setItem('id', `${this.article.id}`);
+                        }
+                    },
+                }
+            }
+        })
+
+        //轮播图
+        var mySwiper = new Swiper('.swiper-container', {
+            direction: 'horizontal', // 垂直切换选项
+            loop: true, // 循环模式选项
+
+            // 如果需要分页器
+            pagination: {
+                el: '.swiper-pagination',
+            },
+
+            // 如果需要前进后退按钮
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+
+            // 如果需要滚动条
+            // scrollbar: {
+            //     el: '.swiper-scrollbar',
+            // },
+        })
+    </script>
+
+</body>
+
+</html>

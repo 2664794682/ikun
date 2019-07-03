@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>login</title>
+    <script src="./lib/vue.js"></script>
+    <script src="./lib/axios.js"></script>
+    <link rel="stylesheet" href="./css/login.css">
+</head>
+
+<body>
+    <div id="app">
+        <div class="form-login">
+            <ul>
+                <li>
+                    <input type="text" class="login-input-username" placeholder="你的手机号/邮箱" v-model="name">
+                </li>
+                <li>
+                    <input type="password" class="login-input-password" placeholder="密码" v-model="password">
+                </li>
+                <li class="remember">
+                    <input type="checkbox" name="" id="">记住我
+                    <span>不是自己的电脑上不要勾选此项</span>
+                    <a href="">无法验证?</a>
+                    <a href="">忘记密码?</a>
+                </li>
+                <li>
+                    <input type="button" class="btn-login" value="登录" @click="post"></input>
+                    <input type="button" class="btn-register" value="注册" @click="toRegister"></input>
+                </li>
+                <li class="sns">
+                    <a href="" class="login-weibo">微博账号登录</a>
+                    <a href="" class="login-weibo">QQ账号登录</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // 函数中的参数分别为 cookie 的名称、值以及过期天数
+        function setCookie(c_name, value, expiredays) {
+            var exdate = new Date();
+            exdate.setDate(exdate.getDate() + expiredays);
+            document.cookie = c_name + "=" + escape(value) + ((expiredays == null) ? "" : ";expires=" + exdate.toGMTString());
+        }
+
+        var app = new Vue({
+            el: '#app',
+            data: {
+                name: '',
+                password: '',
+                msg: 'hello'
+            },
+            methods: {
+                toRegister: function( ){
+                    window.location.href = './register.html';
+                },
+                post: function () {
+                    //让axios发送的请求为 form data 第一种方法
+                    // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+                    // axios.defaults.headers.get['Content-Type'] = 'application/x-www-form-urlencoded';
+                    // axios.defaults.transformRequest = [function (data) {
+                    //     let ret = ''
+                    //     for (let it in data) {
+                    //         ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+                    //     }
+                    //     return ret
+                    // }]
+
+                    //第二种方法
+                    var data = new FormData();
+                    data.append('name', this.name);
+                    data.append('password', this.password);
+
+                    axios({
+                        method: 'post',
+                        url: 'http://119.28.43.120:8080/Kun/user/login',
+                        data
+                    }).then(function (res) {
+                        console.log(res);
+                        if (res.data.code === 2000) {
+                            setCookie('token', res.data.token, 7); // cookie过期时间为7天。
+                            setCookie('tid', res.data.tid, 7);
+                            alert('登录成功！');
+                            window.location.href = './index.html';
+                            console.log(document.cookie)
+                            return;
+                        }
+                        alert('登录失败！');
+                    }).catch(function (error) {
+                        alert('登录失败！');
+                        console.log(error);
+                    });
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

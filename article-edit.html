@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>markdown语法编辑文章</title>
+    <script src="./lib/vue.js"></script>
+    <script src="./lib/axios.js"></script>
+    <script src="./lib/vue-resource.min.js"></script>
+    <script src="./lib/markdown-showdown.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.min.js"></script> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./lib/github-markdown.css">
+    <link rel="stylesheet" href="./css/article-edit.css">
+    <script src="./lib/axios.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <div id="area">
+            <input type="text" id="article-title" placeholder="请输入文章标题" v-model="article.title" @input="mdSwitch">
+            <ul class="options">
+                <li class="option" title="插入图片">
+                    <img src="./img/insertPictures.png" alt="">
+                </li>
+                <li class="option" title="语法参考" @click="toggleTips">
+                    <img src="./img/grammarTips.png" alt="">
+                </li>
+                <li class="option" title="保存">
+                    <img src="./img/preservation.png" alt="">
+                </li>
+                <li class="option" @click="send" title="发布文章">
+                    <p>发布</p>
+                </li>
+            </ul>
+            <textarea name="" id="md-area" placeholder="请用markdown语法输入正文内容" @input="mdSwitch" v-model="article.content"></textarea>
+        </div>
+
+        <article id="show-area" class="markdown-body" v-html="article.preview">
+
+        </article>
+
+        <transition name="fade">
+            <div class="dialog" v-show="dialogShow" @click="toggleTips">
+                <transition name="slide">
+                    <div class="markdown-tips" @click.stop="" v-show="tipsShow">
+                        <div class="title">
+                            Markdown语法参考
+                        </div>
+                        <div class="tips">
+                            <ul>
+                                <li># 一级标题</li>
+                                <li>## 二级标题</li>
+                                <li>##### 五级标题</li>
+                            </ul>
+                            <ul>
+                                <li>- 列表第一项</li>
+                                <li>- 列表第二项</li>
+                            </ul>
+                            <ul>
+                                <li>1. 有序列表第一项</li>
+                                <li>2. 有序列表第二项</li>
+                            </ul>
+                            <ul>
+                                <li>[标题](链接地址)</li>
+                                <li>![图片描述](图片链接地址)</li>
+                            </ul>
+                            <ul>
+                                <li>*斜体*</li>
+                                <li>**粗体**</li>
+                                <li>> 引用段落</li>
+                                <li>```<p>代码块</p>```</li>
+                            </ul>
+                        </div>
+                        <div class="footer" @click="toggleTips">
+                            <p>我知道啦</p>
+                        </div>
+                    </div>
+                </transition>
+                <div class="insertPictures">
+
+                </div>
+            </div>
+        </transition>
+
+    </div>
+
+    <script>
+        // 获取cookie
+        var getCookie = function (c_name) {
+            if (document.cookie.length > 0) {
+                c_start = document.cookie.indexOf(c_name + "=");
+                if (c_start != -1) {
+                    c_start = c_start + c_name.length + 1;
+                    c_end = document.cookie.indexOf(";", c_start);
+                    if (c_end == -1) {
+                        c_end = document.cookie.length;
+                    }
+                    return unescape(document.cookie.substring(c_start, c_end));
+                }
+            }
+            return "";
+        }
+
+        var app = new Vue({
+            el: '#app',
+            data: {
+                dialogShow: false,
+                tipsShow: false,
+                article: {
+                    title: '',
+                    content: '',
+                    preview: '<h4>文章预览</h4>'
+                }
+            },
+            methods: {
+                toggleTips: function () {
+                    app.dialogShow = !app.dialogShow;
+                    app.tipsShow = !app.tipsShow;
+                },
+                mdSwitch: function () {
+                    // var mdValue = document.getElementById("md-area").value;
+                    // var converter = new showdown.Converter();
+                    // var html = converter.makeHtml(mdValue);
+                    // document.getElementById("show-area").innerHTML = html;
+                    var title = `# ${app.article.title}\n`;
+                    localStorage.setItem('content', title + app.article.content);
+                    var converter = new showdown.Converter();
+                    app.article.preview = converter.makeHtml(title + app.article.content);
+                },
+                send: function () {
+
+                    //让axios发送的请求为 form data
+                    // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+                    // axios.defaults.headers.get['Content-Type'] = 'application/x-www-form-urlencoded';
+                    // axios.defaults.transformRequest = [function (data) {
+                    //     let ret = ''
+                    //     for (let it in data) {
+                    //         ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+                    //     }
+                    //     return ret
+                    // }]
+
+                    // axios.defaults.withCredentials = true;
+
+                    if(app.article.title == '') {
+                        alert('请输入文章标题！');
+                        return;
+                    }else if (app.article.content == '') {
+                        alert('请输入文章内容！');
+                        return;
+                    }
+
+                    var data = new FormData();
+                    data.append('title', app.article.title);
+                    data.append('content', app.article.content);
+                    data.append('token', getCookie('token'));
+                    data.append('tid', getCookie('tid'));
+
+                    axios({
+                        method: 'post',
+                        url: 'http://119.28.43.120:8080/Kun/article/add',
+                        data
+                    }).then(function (res) {
+                        console.log(res);
+                        if(res.data.code === 2000) {
+                            window.location.href = './index.html';
+                            alert('发布成功！')
+                        }else if(res.data.code === 2001) {
+                            alert('发布失败,请先登录！');
+                        }else {
+                            alert('发布失败！');
+                        }
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
+                }
+            },
+            watch: {
+
+            },
+        })
+
+        var title = document.getElementById("article-title");
+        title.focus();
+    </script>
+
+</body>
+
+</html>

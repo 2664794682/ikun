@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue.js"></script>
+    <script src="./lib//axios.js"></script>
+    <script src="./lib/markdown-showdown.min.js"></script>
+    <link rel="stylesheet" href="./css/header.css">
+    <link rel="stylesheet" href="./css/content.css">
+    <link rel="stylesheet" href="./lib/github-markdown.css">
+
+</head>
+
+<body>
+    <div id="app">
+        <header>
+            <div id="topGoMain">
+                <a href="./index.html" style="text-decoration:none; color:black; ">
+                    <div class="logo">
+                        <img src="./img/logo.png">
+                        <span>IKUN论坛</span>
+                    </div>
+                </a>
+            </div>
+            <div class="topClassify">
+                <ul>
+                    <li class="classifyItem">
+                        <span>最新资讯</span>
+                    </li>
+                    <li class="classifyItem">
+                        <span>互动娱乐</span>
+                    </li>
+                    <li class="topClassifySearch">
+                        <input type="text" id="topSearch" placeholder="搜索">
+                        <div id="topSearchImg">
+                            <img src="./img/topSearch.png" alt="">
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="topUser">
+                <div class="topUserHead" @click="islogin">
+                    <img src="./img/userHead.png" alt="">
+                </div>
+                <div class="topMsg">
+                    <span>消息</span>
+                </div>
+                <div class="topContribute" @click="contribute">
+                    <span>投稿</span>
+                </div>
+
+            </div>
+        </header>
+
+        <div class="main">
+            <article id="show-area" class="markdown-body" v-html="content">
+                <h4>文章预览</h4>
+            </article>
+            <div class="wrap-my-comment">
+                <div class="my-comment">
+                    <img src="./img/userHead.png" alt="" class="user-head">
+                    <textarea v-model="commentContent" name="" id="" cols="30" rows="10" class="edit" placeholder="写下你的评论..."></textarea>
+                    <a class="send" @click="sendMyComment">发送</a>
+                </div>
+            </div>
+
+            <div class="top-title">
+                <span>所有评论</span>
+            </div>
+            <comment v-if="comments" v-for="item in comments" :comment="item" :key="item.id"></comment>
+        </div>
+
+    </div>
+
+    <template id="comment">
+        <div class="comment">
+            <div class="autor">
+                <div class="user-head">
+                    <a href="">
+                        <img src="./img/userHead.png" alt="">
+                    </a>
+                </div>
+                <div class="info">
+                    <a href="">{{comment.name}}</a>
+                    <div class="meta">
+                        <span>{{comment.createDate}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="comment-wrap">
+                <p>{{comment.commentContent}}</p>
+            </div>
+        </div>
+    </template>
+
+
+    <script>
+        // var converter = new showdown.Converter();
+        // document.getElementById('show-area').innerHTML = converter.makeHtml(sessionStorage.getItem('content'));
+
+        var app = new Vue({
+            el: '#app',
+            data: {
+                article: '',
+                comments: '',
+                content: '',
+                commentContent: ''
+            },
+            methods: {
+                islogin: function () {
+
+                },
+                contribute: function () {
+
+                },
+                sendMyComment: function () {
+                    if(this.commentContent == '') {
+                        alert('评论不能为空！');
+                        return;
+                    }
+                    console.log(app.article)
+                    var data = new FormData();
+                    data.append('token',getCookie('token'));
+                    data.append('tid',getCookie('tid'));
+                    data.append('aid',app.article.id);
+                    data.append('commentContent',this.commentContent);
+                    axios({
+                        method: 'post',
+                        url: 'http://368xt2.cn:8080/Kun/article/addComment',
+                        data
+                    }).then(function (res) {
+                        // app.comments = res.data;
+                        window.location.reload();
+                        if(res.data.code === 2001) {
+                            alert('请先登录！');
+                            window.location.href = './login.html';
+                        }
+                    }).catch(function (err) {
+                        console.log(err)
+                    })
+                }
+            },
+            created() {
+                let data = new FormData();
+                data.append('aid', parseInt(sessionStorage.getItem('id')));
+
+                axios({
+                    method: 'post',
+                    url: 'http://368xt2.cn:8080/Kun/article/search',
+                    data
+                }).then(function (res) {
+                    app.article = res.data[0];
+
+                    var converter = new showdown.Converter();
+                    app.content = converter.makeHtml(`# ${app.article.title}\n${app.article.content}`);
+                    // document.getElementById('show-area').innerHTML = app.content
+                }).catch(function (err) {
+                    console.log(err);
+                })
+
+                axios({
+                    method: 'post',
+                    url: 'http://368xt2.cn:8080/Kun/article/searchComment',
+                    data
+                }).then(function (res) {
+                    app.comments = res.data;
+                }).catch(function (err) {
+                    console.log(err)
+                })
+            },
+            components: {
+                comment: {
+                    props: ['comment'],
+                    template: '#comment',
+                    data() {
+                        return {
+
+                        }
+                    },
+                    methods: {
+
+                    },
+                    created() {
+
+                    },
+                }
+            }
+        })
+
+        // 获取cookie
+        var getCookie = function (c_name) {
+            if (document.cookie.length > 0) {
+                c_start = document.cookie.indexOf(c_name + "=");
+                if (c_start != -1) {
+                    c_start = c_start + c_name.length + 1;
+                    c_end = document.cookie.indexOf(";", c_start);
+                    if (c_end == -1) {
+                        c_end = document.cookie.length;
+                    }
+                    return unescape(document.cookie.substring(c_start, c_end));
+                }
+            }
+            return "";
+        }
+    </script>
+</body>
+
+</html>

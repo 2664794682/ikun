@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>个人中心</title>
+    <script src="./lib/vue.js"></script>
+    <script src="./lib/axios.js"></script>
+    <link rel="stylesheet" href="./css/personal-center.css">
+</head>
+
+<body>
+    <div id="app">
+        <div class="user">
+            <div class="user-head">
+                <img src="./img/userHead.png" alt="">
+            </div>
+            <div class="user-name">
+                <p>{{user.name}}</p>
+            </div>
+            <div class="info">
+                <a @click="logoff">退出登录</a>
+            </div>
+        </div>
+        <div class="my-articles">
+            <div class="my-article">
+                <img src="./img/article.png" alt="">
+                <span>我的文章</span>
+            </div>
+            <talktmpl v-if="article" v-for="item in article" :key="item.id" :article="item"></talktmpl>
+        </div>
+    </div>
+
+    <template id="talktmpl">
+        <div class="talk-item">
+            <div class="icn"></div>
+            <div class="title">
+                <a href="./content.html" @click="toContent">{{article.title}}</a>
+            </div>
+            <div class="by">
+                <a href="">{{article.user.name}}</a>
+                <p>{{article.createDate.split(' ')[0]}}</p>
+            </div>
+            <div class="num">{{article.commentNum || 0}}</div>
+            <div class="by">
+                <a href="">{{article.lastcomm ? article.lastcomm.name : '无'}}</a>
+                <p>{{article.lastcomm ? article.lastcomm.createDate : ''}}</p>
+            </div>
+        </div>
+    </template>
+
+    <script>
+        // 获取cookie
+        var getCookie = function (c_name) {
+            if (document.cookie.length > 0) {
+                c_start = document.cookie.indexOf(c_name + "=");
+                if (c_start != -1) {
+                    c_start = c_start + c_name.length + 1;
+                    c_end = document.cookie.indexOf(";", c_start);
+                    if (c_end == -1) {
+                        c_end = document.cookie.length;
+                    }
+                    return unescape(document.cookie.substring(c_start, c_end));
+                }
+            }
+            return "";
+        }
+
+
+        var app = new Vue({
+            el: '#app',
+            data: {
+                article: false,
+                user: ''
+            },
+            methods: {
+                logoff: function () {
+                    document.cookie = "token=; expires=Thu, 01 Jan 1980 00:00:00 GMT";
+                    if (!getCookie('token')) {
+                        window.location.href = './index.html';
+                    }
+                }
+            },
+            created() {
+                var data = new FormData();
+                data.append('token', getCookie('token'));
+                data.append('tid', getCookie('tid'));
+
+                axios({
+                    method: 'post',
+                    url: 'http://119.28.43.120:8080/Kun/user/check',
+                    data
+                }).then(function (res) {
+                    app.user = res.data.user;
+                    console.log(app.user.name)
+
+                    data.append('name', app.user.name);
+
+                    axios({
+                        method: 'post',
+                        url: 'http://119.28.43.120:8080/Kun/article/search',
+                        data
+                    }).then(function (res) {
+                        if (res.data == '') {
+
+                        } else if (res.data.length >= 1) {
+                            app.article = res.data;
+                        }
+
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
+
+                }).catch(function (error) {
+                    console.log(error);
+                });
+            },
+            components: {
+                talktmpl: {
+                    props: ['article'],
+                    template: '#talktmpl',
+                    data() {
+                        return {
+
+                        }
+                    },
+                    methods: {
+                        toContent: function () {
+                            //把点击的帖子数据存入sessionStorage
+                            sessionStorage.setItem('content', `# ${this.article.title}\n${this.article.content}`);
+                            sessionStorage.setItem('id', `${this.article.id}`);
+                        }
+                    },
+                }
+            }
+        })
+
+    </script>
+</body>
+
+</html>
